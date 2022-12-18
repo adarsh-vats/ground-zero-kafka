@@ -18,7 +18,10 @@ public class GroundZeroCtrl {
 
     @GetMapping(value = "/messages")
     public void sendMessage(@RequestParam Map<String, String> request){
+
+        //Producer
         kafkaTemplate.send("demo.topic", String.valueOf(request));
+
     }
 
     @GetMapping(value = "/ping")
