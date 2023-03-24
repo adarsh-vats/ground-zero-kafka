@@ -1,12 +1,14 @@
 package com.groundzero.kafka.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -24,8 +26,33 @@ public class GroundZeroCtrl {
 
     }
 
+    @GetMapping(value = "/log-my-header")
+    public ResponseEntity<Map<String, String>> getHeaders(@RequestHeader Map<String, String> headers){
+        return new ResponseEntity<Map<String, String>>(headers, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/my-header")
+    public ResponseEntity<Map<String, String>> printHeadersOnConsole(HttpServletRequest request){
+        Map<String, String> headers = new HashMap<>();
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while(headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            headers.put(headerName, request.getHeader(headerName));
+        }
+        return new ResponseEntity<Map<String, String>>(headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/ip-address")
+    public String getIpAddress(HttpServletRequest request) {
+        String ipAddress = request.getHeader("X-Forwarded-For");
+        if (ipAddress == null) {
+            ipAddress = request.getRemoteAddr();
+        }
+        return "IP address: " + ipAddress;
+    }
+
     @GetMapping(value = "/ping")
-    public String ping(@RequestParam Map<String, String> request){
-        return "Pong!!";
+    public ResponseEntity<String> ping(){
+        return new ResponseEntity<String>("Pong!!", HttpStatus.OK);
     }
 }

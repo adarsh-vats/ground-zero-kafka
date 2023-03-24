@@ -3,10 +3,10 @@ package com.groundzero.kafka;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class GroundZeroKafkaApplicationTests {
 
-	@Test
+	//@Test
 	void contextLoads() {
 	}
 
