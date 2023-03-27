@@ -18,6 +18,9 @@ public class GroundZeroCtrl {
     @Autowired
     KafkaTemplate kafkaTemplate;
 
+    @Autowired
+    HttpServletRequest request;
+
     @GetMapping(value = "/messages")
     public void sendMessage(@RequestParam Map<String, String> request){
 
@@ -32,7 +35,7 @@ public class GroundZeroCtrl {
     }
 
     @GetMapping(value = "/my-header")
-    public ResponseEntity<Map<String, String>> printHeadersOnConsole(HttpServletRequest request){
+    public ResponseEntity<Map<String, String>> printHeadersOnConsole(){
         Map<String, String> headers = new HashMap<>();
         Enumeration<String> headerNames = request.getHeaderNames();
         while(headerNames.hasMoreElements()) {
@@ -43,7 +46,7 @@ public class GroundZeroCtrl {
     }
 
     @GetMapping("/ip-address")
-    public String getIpAddress(HttpServletRequest request) {
+    public String getIpAddress() {
         String ipAddress = request.getHeader("X-Forwarded-For");
         if (ipAddress == null) {
             ipAddress = request.getRemoteAddr();
